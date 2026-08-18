@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">le0s1mba avatar</title>
+  <desc id="desc">A stylized letter L on a violet and blue gradient background.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#background)"/>
+  <path d="M172 112v288h184" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="64"/>
+</svg>
