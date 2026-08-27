@@ -31,7 +31,7 @@ draft: false
 ![call __x86_get_pc_thunk func](./src/call__x86_get_pc_thunk_func.jpg)
 
 위의 코드를 보면 __x86_get_pc_thunk_bx 함수를 호출하여 ebx 레지스터에는 현재 0x8049503라는 값이 들어있게 된다.  
-그 후, add ebx, 3AF1h가 실행이 되는데, 그러면 ebx 레지스터에는 0x804CFF4 값이 들어있게 된다.  
+그 후, ebx 레지스터에 0x3AF1을 더하여 최종적으로 ebx 레지스터에는 0x804CFF4 값이 들어있게 된다.  
 
 ![.got.plt section](./src/got_plt_section.jpg)
 
@@ -40,7 +40,7 @@ draft: false
 추가로 아까 위에서 0x3AF1을 더한 이유는 .got.plt 섹션에서 0x8049503을 뺐을 때, 0x3AF1이기 때문이다.  
 
 
-그럼 왜 힘들게 이러한 방식으로 got의 base 주소를 획득하는 걸까?  
+그럼 왜 힘들게 이러한 방식으로 GOT의 base 주소를 획득하는 걸까?  
 우선 64bit에선 rip relative가 지원되기 때문에 다른 레지스터에 미리 rip 레지스터와 특정 주소를 더해 담아둬서 사용하는 방식으로 동작하지만, 32bit에서는 rip relative가 지원되지 않는다.  
 때문에 32bit에 있는 eip 레지스터는 단순히 다음 실행할 명령어 주소만 가지고 있고, eip 레지스터에 add, sub, mov, lea 같은 명령어들을 사용하지 못하게 된다.  
 그래서 이를 우회하기 위해 다른 레지스터에 현재 위치를 넣어두고 거기에 특정 값을 더하는 식으로 진행하는 __x86.get_pc_thunk 같은 방법이 사용되는 것이다.  
