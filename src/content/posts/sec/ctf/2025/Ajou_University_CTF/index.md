@@ -1,7 +1,7 @@
 ---
 title: "아주대 COSS CTF 본선"
 published: 2025-07-19
-description: ""
+description: "아주대 COSS CTF writeup"
 image: ""
 tags: ["writeup"]
 category: "CTF"
