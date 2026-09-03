@@ -3,7 +3,7 @@
 ### 2026
 - Korea University KCTF 1st
 - HackTheon Sejong Beginner 4th
-- INCOGNITO CTF 2st
+- INCOGNITO CTF 4th
 - PUTCyberDays CTF 3rd
 - Nanjing University of Posts and Telecommuncations NCTF 3rd
 
