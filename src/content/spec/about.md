@@ -6,6 +6,8 @@
 - INCOGNITO CTF 4th
 - PUTCyberDays CTF 3rd
 - Nanjing University of Posts and Telecommuncations NCTF 3rd
+- BlackHat MEA Qualification 20th
+- TFC CTF 19th
 
 ### 2025
 - 사이버가디언즈 경진대회 4th
