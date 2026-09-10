@@ -26,7 +26,8 @@ for i in range(size):
     code[i] ^= state
 ```
 
-두 코드의 영역을 복호화하면 정상적인 AArch64 명령어가 나오지만, 내부는 수 MB의 CFF와 MBA로 난독화되어 있다. 이 코드를 전부 정리하는 대신 데이터 영역의 white-box 테이블을 분석했다.  
+두 코드의 영역을 복호화하면 정상적인 AArch64 명령어가 나오지만, 내부는 수 MB의 CFF와 MBA로 난독화되어 있다.  
+이 코드를 전부 정리하는 대신 데이터 영역의 white-box 테이블을 분석했다.  
 
 ```text
 wb_tii   9 × 16 × 256 × 4 bytes
@@ -45,7 +46,8 @@ wb_tv    16 × 256 bytes
 구조상 첫 9라운드는 Type-II/III 테이블과 니블 XOR 테이블을 사용하고, 마지막 라운드는 Type-V 테이블을 사용하는 Chow 계열 white-box AES이다.  
 
 그럼 이제 AES 키를 복구해보자.  
-첫 라운드 Type-II 테이블에는 SBOX(input ^ key_byte) 결과가 인코딩되어 있다. 올바른 키 후보에서는 출력 니블을 기준으로 나눈 S-box 값들이 같은 GF(2) 부분공간의 코셋을 이루므로, 각 테이블에서 0x00부터 0xFF까지 검사해 키 바이트를 하나씩 찾을 수 있다.  
+첫 라운드 Type-II 테이블에는 SBOX(input ^ key_byte) 결과가 인코딩되어 있다.  
+올바른 키 후보에서는 출력 니블을 기준으로 나눈 S-box 값들이 같은 GF(2) 부분공간의 코셋을 이루므로, 각 테이블에서 0x00부터 0xFF까지 검사해 키 바이트를 하나씩 찾을 수 있다.  
 16개 테이블에서 복구한 값을 ShiftRows 순서에 맞게 재배치하면 다음 AES-128 키가 나온다.  
 
 ```text
@@ -347,8 +349,10 @@ cadence/resonance/target/v2
 PERFECT CADENCE - the track resonates
 ```
 
-원격 서비스는 세션마다 16바이트 nonce와 sample rate를 보여주며, 해당 rate를 사용하는 mono 16-bit PCM WAV를 base64로 입력받는다. 디코딩한 WAV에 샘플이 16개보다 많으면 encore.resonates(nonce, rate, samples, len)로 검증한다.  
-검증 루틴은 SHA-256으로 초기 상태와 목표 상태를 만든 뒤, 입력 샘플을 8개의 u32 상태로 섞는다. 내부 연산은 XOR, rotate, lane 선택, GF(2) 곱셈으로 구성되어 있다. 분기와 회전량도 샘플 값과 무관하므로, nonce와 rate 및 입력 길이를 고정하면 전체 변환은 GF(2) 위의 어떤 변환이 된다.  
+원격 서비스는 세션마다 16바이트 nonce와 sample rate를 보여주며, 해당 rate를 사용하는 mono 16-bit PCM WAV를 base64로 입력받는다.  
+디코딩한 WAV에 샘플이 16개보다 많으면 encore.resonates(nonce, rate, samples, len)로 검증한다.  
+검증 루틴은 SHA-256으로 초기 상태와 목표 상태를 만든 뒤, 입력 샘플을 8개의 u32 상태로 섞는다.  
+내부 연산은 XOR, rotate, lane 선택, GF(2) 곱셈으로 구성되어 있다. 분기와 회전량도 샘플 값과 무관하므로, nonce와 rate 및 입력 길이를 고정하면 전체 변환은 GF(2) 위의 어떤 변환이 된다.  
 
 함수 마지막에서는 계산 결과와 목표값을 XOR한 뒤 YMM0가 0인지 검사한다.  
 
@@ -360,14 +364,16 @@ PERFECT CADENCE - the track resonates
 0x10afe5f  sete   al
 ```
 
-따라서 GDB로 0x10afe5a에 bp를 걸고 YMM0을 읽으면 256비트 출력 오라클을 얻을 수 있다. 32개의 PCM16 샘플을 사용하면 입력은 512비트이므로, 영점 입력과 512개의 단위 벡터를 넣어 다음 식의 상수항과 행렬을 복원했다.  
+따라서 GDB로 0x10afe5a에 bp를 걸고 YMM0을 읽으면 256비트 출력 오라클을 얻을 수 있다.  
+32개의 PCM16 샘플을 사용하면 입력은 512비트이므로, 영점 입력과 512개의 단위 벡터를 넣어 다음 식의 상수항과 행렬을 복원했다.  
 
 ```text
 F(x) = A*x XOR c
 A*x = c
 ```
 
-임의 입력으로 아핀성을 확인한 결과 모든 검사를 통과했고, 복원한 256x512 행렬의 rank는 255였다. python 정수를 bitset으로 사용해 GF(2) 가우스 소거를 수행하면 YMM0을 0으로 만드는 샘플을 구할 수 있다.  
+임의 입력으로 아핀성을 확인한 결과 모든 검사를 통과했고, 복원한 256x512 행렬의 rank는 255였다.  
+python 정수를 bitset으로 사용해 GF(2) 가우스 소거를 수행하면 YMM0을 0으로 만드는 샘플을 구할 수 있다.  
 
 ```python
 from __future__ import annotations
@@ -1018,8 +1024,10 @@ CIPHER ACCEPTED  VAULT OPEN
 CIPHER PANELS  TOP 4  MID 2  BOT 1  READ L TO R
 ```
 
-"CIPHER ACCEPTED VAULT OPEN"의 xrefs를 따라가면 렌더 함수와 flag 출력 버퍼인 0x1406630을 찾을 수 있다. 이 버퍼의 쓰기 xrefs를 따라가면 lever 검사 로직과 복호화 함수 sub_11EF760에 도달한다.  
-lever를 사용할 때마다 입력 값을 0x1000880의 정답 배열과 비교한다. 값이 틀리면 진행도가 0으로 초기화되고, 16개가 모두 맞으면 복호화 함수가 호출된다.  
+"CIPHER ACCEPTED VAULT OPEN"의 xrefs를 따라가면 렌더 함수와 flag 출력 버퍼인 0x1406630을 찾을 수 있다.  
+이 버퍼의 쓰기 xrefs를 따라가면 lever 검사 로직과 복호화 함수 sub_11EF760에 도달한다.  
+lever를 사용할 때마다 입력 값을 0x1000880의 정답 배열과 비교한다.  
+값이 틀리면 진행도가 0으로 초기화되고, 16개가 모두 맞으면 복호화 함수가 호출된다.  
 
 ```text
 5, 1, 6, 2, 7, 0, 3, 4, 1, 7, 2, 5, 0, 6, 4, 3
@@ -1190,7 +1198,8 @@ AES-256-CBC key=VI_LEAKED_BUILD_2026
 C:\buildagent\workspace\gta6_dev\rage\streaming.pdb
 ```
 
-하지만 DLL의 .text 섹션에는 사실상 ret만 존재한다. 실행 파일에서도 이 문자열은 cryptDecoy라는 미끼 루틴에만 사용되므로 실제 AES 키가 아니다.  
+하지만 DLL의 .text 섹션에는 사실상 ret만 존재한다.  
+실행 파일에서도 이 문자열은 cryptDecoy라는 미끼 루틴에만 사용되므로 실제 AES 키가 아니다.  
 실제 키 재료는 DLL의 .rdata에 있는 TFCSHARD/V1 레코드이다.  
 
 ```text
@@ -1228,7 +1237,8 @@ shard = encrypted_shard XOR mask
 5a4159ffaf885e3485f183692150f4985f859fac1e36639088740063349fccf5
 ```
 
-patch_06.dat에는 키 생성에 사용되는 산술 VM이 들어있다. 파일은 다음 변환을 거쳐 풀리게 된다.  
+patch_06.dat에는 키 생성에 사용되는 산술 VM이 들어있다.  
+파일은 다음 변환을 거쳐 풀리게 된다.  
 
 ```text
 ASCII85 decode
@@ -1244,7 +1254,8 @@ ASCII85 decode
 opcode:u8 | a:u8 | b:u8 | c:u8 | immediate:u32-le
 ```
 
-VM은 8개의 32비트 레지스터를 사용하며 프로그램 전체를 네 번 실행한다. opcode는 덧셈, XOR, 곱셈, rotate와 0x1B reduction을 조합한다.  
+VM은 8개의 32비트 레지스터를 사용하며 프로그램 전체를 네 번 실행한다.  
+opcode는 덧셈, XOR, 곱셈, rotate와 0x1B reduction을 조합한다.  
 
 키 생성 함수 deriveMaterial은 root seed, challenge ID, 컨테이너 context를 SHA-256으로 묶은 뒤 VM 출력과 다시 해시하는 과정을 반복한다.  
 
@@ -1269,7 +1280,8 @@ v4 outer container
 → flag
 ```
 
-외부 컨테이너는 RSC7-AUTH-V4 prefix까지 HMAC 입력에 포함되며, 내부 컨테이너는 prefix 없이 컨테이너 본문을 인증한다. 두 HMAC이 모두 일치한 뒤 최종 flag를 얻을 수 있다.  
+외부 컨테이너는 RSC7-AUTH-V4 prefix까지 HMAC 입력에 포함되며, 내부 컨테이너는 prefix 없이 컨테이너 본문을 인증한다.  
+두 HMAC이 모두 일치한 뒤 최종 flag를 얻을 수 있다.  
 
 ```python
 import argparse
