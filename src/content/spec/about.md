@@ -18,7 +18,7 @@
 - Midnight Flag CTF Student 18th
 - Nanjing University of Posts and Telecommuncations NCTF 3rd
 - PUTCyberDays CTF 3rd
-- INCOGNITO CTF 4th
+- INCOGNITO CTF 2nd
 - HackTheon Sejong Beginner 4th
 - Korea University KCTF 1st
 - BlackHat MEA Qualification 20th
