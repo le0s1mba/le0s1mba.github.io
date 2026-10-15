@@ -23,6 +23,7 @@
 - Korea University KCTF 1st
 - BlackHat MEA Qualification 20th
 - TFC CTF 19th
+- kBxAc CTF 1st
 
 
 # Education
