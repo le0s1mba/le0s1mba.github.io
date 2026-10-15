@@ -25,6 +25,8 @@
 - TFC CTF 19th
 - kBxAc CTF 1st
 
+# CVE
+- CVE-2026-83873
 
 # Education
 - Semyeong Computer High School [2023.03 ~ 2026.01]
