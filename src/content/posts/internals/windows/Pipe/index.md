@@ -116,15 +116,27 @@ ConnectNamedPipe 함수가 실행되면, Pipe는 클라이언트의 연결을 �
 근데 클라이언트가 Pipe랑 연결하기 위해선, 해당 Pipe의 핸들이 필요하다.  
 
 ```cpp
-HANDLE CreateFileA(                                                                 BOOL CallNamedPipeA(
-  [in]           LPCSTR                lpFileName,                                      [in]  LPCSTR  lpNamedPipeName,
-  [in]           DWORD                 dwDesiredAccess,                                 [in]  LPVOID  lpInBuffer,
-  [in]           DWORD                 dwShareMode,                                     [in]  DWORD   nInBufferSize,
-  [in, optional] LPSECURITY_ATTRIBUTES lpSecurityAttributes,                            [out] LPVOID  lpOutBuffer,
-  [in]           DWORD                 dwCreationDisposition,                           [in]  DWORD   nOutBufferSize,
-  [in]           DWORD                 dwFlagsAndAttributes,                            [out] LPDWORD lpBytesRead,
-  [in, optional] HANDLE                hTemplateFile                                    [in]  DWORD   nTimeOut
-);                                                                                  );
+HANDLE CreateFileA(
+  [in]           LPCSTR                lpFileName,
+  [in]           DWORD                 dwDesiredAccess,
+  [in]           DWORD                 dwShareMode,
+  [in, optional] LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+  [in]           DWORD                 dwCreationDisposition,
+  [in]           DWORD                 dwFlagsAndAttributes,
+  [in, optional] HANDLE                hTemplateFile
+);
+
+
+
+BOOL CallNamedPipeA(
+  [in]  LPCSTR  lpNamedPipeName,
+  [in]  LPVOID  lpInBuffer,
+  [in]  DWORD   nInBufferSize,
+  [out] LPVOID  lpOutBuffer,
+  [in]  DWORD   nOutBufferSize,
+  [out] LPDWORD lpBytesRead,
+  [in]  DWORD   nTimeOut
+);
 ```
 
 핸들을 얻는 방법에는 CreateFileA 함수와 CallNamedPipeA 함수가 존재하는데, CallNamedPipeA 함수는 Pipe에 대해 핸들 획득 → 쓰기/읽기 수행 → 닫기까지 한 번에 진행하는 일회용 스타일이므로 CallNamedPipeA 함수는 넘어가고 CreateFileA 함수를 기준으로 설명하도록 하겠다.  
