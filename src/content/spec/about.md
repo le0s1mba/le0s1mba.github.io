@@ -24,6 +24,7 @@
 - BlackHat MEA Qualification 20th
 - TFC CTF 19th
 - kBxAc CTF 1st
+- HITCON CTF 5th
 
 # CVE
 - CVE-2026-83873
