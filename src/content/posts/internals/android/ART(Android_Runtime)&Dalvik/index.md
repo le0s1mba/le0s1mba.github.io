@@ -3,7 +3,7 @@ title: "ART(Android Runtime) & Dalvik"
 published: 2025-12-19
 description: "Android의 Runtime인 ART와 Dalvik VM에 대한 설명"
 image: ""
-tags: ["ART", "Android Runtime", "Dalvik", "DEX", "JIT", "AOT"]
+tags: ["Android", "ART", "Android Runtime", "Dalvik", "DEX", "JIT", "AOT"]
 category: "Android"
 draft: false
 ---

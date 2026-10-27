@@ -3,7 +3,7 @@ title: "Android Components"
 published: 2025-12-05
 description: "Android Components에 대한 간략한 설명"
 image: ""
-tags: ["components", "internals"]
+tags: ["Android", "components", "internals"]
 category: "Android"
 draft: false
 ---
