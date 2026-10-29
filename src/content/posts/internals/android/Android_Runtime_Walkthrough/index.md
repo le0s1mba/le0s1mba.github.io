@@ -3,7 +3,7 @@ title: "Android Runtime Walkthrough"
 published: 2025-12-10
 description: "Android 부팅 후의 초기화 과정 설명"
 image: ""
-tags: ["Runtime Walkthrough", "Daemone Process", "Zygote Process", "Service Manager", "System Server", "Framewalk Service", "Flinger"]
+tags: ["Android", "Runtime Walkthrough", "Daemone Process", "Zygote Process", "Service Manager", "System Server", "Framewalk Service", "Flinger"]
 category: "Android"
 draft: false
 ---
