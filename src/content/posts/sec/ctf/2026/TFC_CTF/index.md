@@ -3,7 +3,7 @@ title: "TFC CTF"
 published: 2026-09-09
 description: "TFC CTF writeup"
 image: ""
-tags: ["writeup"]
+tags: ["2026", "writeup"]
 category: "CTF"
 draft: false
 ---
