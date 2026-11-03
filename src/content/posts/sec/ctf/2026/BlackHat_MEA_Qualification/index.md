@@ -3,7 +3,7 @@ title: "BlackHat MEA Qualification"
 published: 2026-09-06
 description: "BlackHat MEA Qualification writeup"
 image: ""
-tags: ["writeup"]
+tags: ["2026", "writeup"]
 category: "CTF"
 draft: false
 ---
