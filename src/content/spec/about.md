@@ -25,6 +25,7 @@
 - TFC CTF 19th
 - kBxAc CTF 1st
 - HITCON CTF 5th
+- 제 4회 충청권 BioHealth CTF 2nd
 
 # CVE
 - CVE-2026-83873
