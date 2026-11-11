@@ -29,6 +29,8 @@
 
 # CVE
 - CVE-2026-83873
+- CVE-2026-119889
+- CVE-2026-119914
 
 # Education
 - Semyeong Computer High School [2023.03 ~ 2026.01]
